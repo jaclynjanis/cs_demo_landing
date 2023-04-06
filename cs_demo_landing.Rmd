@@ -1,0 +1,169 @@
+---
+title: "Posit Connect demo content at a glance"
+output: 
+  html_document:
+    theme:
+      bg: "#FFFFFF"
+      fg: "#22333B" 
+      primary: "#447099"
+      dark: "#213D4F"
+      light: "#A2B8CB"
+      base_font: "Lato, sans-serif"
+      heading_font: "Lato, sans-serif"
+      border-color: "#419599"
+      gray-100: "#949494"
+---
+
+
+```{r setup, include=FALSE}
+library(connectwidgets)
+library(dplyr)
+library(lubridate)
+
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+client <- connect(
+  # server  = Sys.getenv("CONNECT_SERVER"),
+  # api_key = Sys.getenv("CONNECT_API_KEY")
+  )
+
+# get that content
+all_content <- client %>%
+  content() %>% 
+  #creating year variables to easily filter to more recent content
+  mutate(created_year = year(created_time),
+         updated_year = year(updated_time))
+
+```
+
+Welcome to the Customer Success demo content landing page. Use this to find examples of deployed content on Connect that you can share with customers. And use this landing page to demo how helpful connectwidgets can be to point a team to the content they need to see.
+
+## Applications {.tabset .tabset-fade .tabset-pills}
+
+### Shiny
+
+```{r}
+all_content %>% 
+  #we need to figure out meaningful tagging or just rely on specific pieces of content and surface them individually.
+  filter(grepl("shiny", name) & !grepl("python", name), created_year >= 2021) %>% 
+  # count()
+  slice_sample(n=1) %>% 
+  rsc_grid()
+```
+
+### Shiny for Python
+
+```{r}
+all_content %>% 
+  filter(grepl("shiny", name) & grepl("python", name), created_year >= 2021) %>% 
+  # count()
+  rsc_grid()
+```
+
+### Dash
+
+```{r}
+all_content %>% 
+  by_tag("Dash") %>% 
+  filter(created_year >= 2021) %>% 
+  rsc_grid()
+```
+
+### Streamlit
+
+```{r}
+all_content %>% 
+  # by_tag("Streamlit") %>% 
+  # would ideally like to do this by tag but only one streamlit app on colorado has the streamlit tag today - let's discuss tags when we meet
+  filter(grepl("streamlit", name), created_year >= 2021) %>% 
+  slice_sample(n=10) %>% 
+  rsc_grid()
+```
+
+### Bokeh
+
+```{r}
+all_content %>% 
+  # by_tag("Bokeh") %>% 
+  filter(grepl("bokeh", name), created_year >= 2021) %>% 
+  slice_sample(n=10) %>% 
+  rsc_grid()
+```
+
+## Documents {.tabset .tabset-fade .tabset-pills}
+
+### R Markdown
+
+```{r}
+all_content %>% 
+  # ideally by a tag 
+  filter(grepl("rmd", name), !grepl("parameterized", name), created_year >= 2021) %>% 
+  slice_sample(n=10) %>% 
+  rsc_grid()
+```
+
+### Parameterized Rmd
+
+```{r}
+all_content %>% 
+  # ideally by a tag 
+  filter(grepl("parameterized", name), created_year >= 2021) %>% 
+  slice_sample(n=10) %>% 
+  rsc_grid()
+```
+
+### Interactive documents
+
+```{r}
+all_content %>% 
+  # ideally by a tag but there are probably some other methods to dig up these examples
+  filter((grepl("interactive", name) & grepl("document", name)) | 
+           (grepl("shiny", name) & grepl("document", name)), 
+         created_year >= 2021) %>% 
+  rsc_grid()
+```
+
+### Quarto
+
+```{r}
+all_content %>% 
+  filter(grepl("quarto", name), created_year >= 2021) %>% 
+  slice_sample(n=10) %>% 
+  rsc_grid()
+```
+
+### Jupyter Notebook
+
+```{r}
+all_content %>% 
+  filter(grepl("jupyter", name) & grepl("notebook", name), created_year >= 2021) %>% 
+  # count()
+  rsc_grid()
+```
+
+### connectwidgets
+
+
+```{r}
+all_content %>% 
+  filter(grepl("connectwidgets", name), created_year >= 2021) %>% 
+  #no clue why this is working as a table but not as a grid...
+  rsc_table()
+```
+
+
+## APIs
+```{r}
+all_content %>% 
+  filter(content_category == "api", created_year >= 2021) %>% 
+  rsc_grid()
+```
+
+## Pins
+
+Python pins now included.
+```{r}
+all_content %>% 
+  filter(content_category == "pin", created_year >= 2021) %>% 
+  rsc_grid()
+```
