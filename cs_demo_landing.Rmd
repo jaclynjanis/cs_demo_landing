@@ -5,13 +5,14 @@ output:
     theme:
       bg: "#FFFFFF"
       fg: "#22333B" 
-      primary: "#447099"
+      primary: "#297075"
       dark: "#213D4F"
       light: "#A2B8CB"
       base_font: "Lato, sans-serif"
       heading_font: "Lato, sans-serif"
       border-color: "#419599"
       gray-100: "#949494"
+
 ---
 
 
@@ -47,7 +48,6 @@ all_content %>%
   #we need to figure out meaningful tagging or just rely on specific pieces of content and surface them individually.
   filter(grepl("shiny", name) & !grepl("python", name), created_year >= 2021) %>% 
   # count()
-  slice_sample(n=1) %>% 
   rsc_grid()
 ```
 
@@ -76,7 +76,6 @@ all_content %>%
   # by_tag("Streamlit") %>% 
   # would ideally like to do this by tag but only one streamlit app on colorado has the streamlit tag today - let's discuss tags when we meet
   filter(grepl("streamlit", name), created_year >= 2021) %>% 
-  slice_sample(n=10) %>% 
   rsc_grid()
 ```
 
@@ -86,7 +85,6 @@ all_content %>%
 all_content %>% 
   # by_tag("Bokeh") %>% 
   filter(grepl("bokeh", name), created_year >= 2021) %>% 
-  slice_sample(n=10) %>% 
   rsc_grid()
 ```
 
@@ -98,7 +96,6 @@ all_content %>%
 all_content %>% 
   # ideally by a tag 
   filter(grepl("rmd", name), !grepl("parameterized", name), created_year >= 2021) %>% 
-  slice_sample(n=10) %>% 
   rsc_grid()
 ```
 
@@ -108,7 +105,6 @@ all_content %>%
 all_content %>% 
   # ideally by a tag 
   filter(grepl("parameterized", name), created_year >= 2021) %>% 
-  slice_sample(n=10) %>% 
   rsc_grid()
 ```
 
@@ -128,7 +124,6 @@ all_content %>%
 ```{r}
 all_content %>% 
   filter(grepl("quarto", name), created_year >= 2021) %>% 
-  slice_sample(n=10) %>% 
   rsc_grid()
 ```
 
@@ -143,12 +138,13 @@ all_content %>%
 
 ### connectwidgets
 
+You're lookin' at it.
 
-```{r}
-all_content %>% 
-  filter(grepl("connectwidgets", name), created_year >= 2021) %>% 
-  #no clue why this is working as a table but not as a grid...
-  rsc_table()
+```{r echo=FALSE}
+# all_content %>%
+#   filter(grepl("connectwidgets", name), created_year >= 2021) %>%
+#   #no clue why this is working as a table but not as a grid...
+#   rsc_table()
 ```
 
 
