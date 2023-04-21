@@ -24,8 +24,8 @@ library(lubridate)
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 client <- connect(
-  # server  = Sys.getenv("CONNECT_SERVER"),
-  # api_key = Sys.getenv("CONNECT_API_KEY")
+  server  = Sys.getenv("CONNECT_SERVER"),
+  api_key = Sys.getenv("CONNECT_API_KEY")
   )
 
 # get that content
@@ -40,7 +40,7 @@ cs_demo_content <- all_content %>%
 # eventually this will be by display_case
 ```
 
-Welcome to the Customer Success demo content landing page. Use this to find examples of deployed content on Connect that you can share with customers. And use this landing page to demo how helpful connectwidgets can be to point a team to the content they need to see.
+Welcome to the Customer Success demo content landing page. Use this to find examples of deployed content on Connect that you can show your customers. And use this landing page to demo how helpful connectwidgets can be to point a team to the content they need to see.
 
 ## Applications {.tabset .tabset-fade .tabset-pills}
 
@@ -86,20 +86,35 @@ cs_demo_content %>%
 ### Streamlit
 
 ```{r}
-all_content %>% 
-  # by_tag("Streamlit") %>% 
-  # would ideally like to do this by tag but only one streamlit app on colorado has the streamlit tag today - let's discuss tags when we meet
-  filter(grepl("streamlit", name), created_year >= 2021) %>% 
+# all_content %>% 
+#   # by_tag("Streamlit") %>% 
+#   # would ideally like to do this by tag but only one streamlit app on colorado has the streamlit tag today - let's discuss tags when we meet
+#   filter(grepl("streamlit", name), created_year >= 2021) %>% 
+#   rsc_grid()
+
+cs_demo_content %>% 
+  by_tag("streamlit") %>% 
   rsc_grid()
 ```
 
 ### Bokeh
 
 ```{r}
-all_content %>% 
-  # by_tag("Bokeh") %>% 
-  filter(grepl("bokeh", name), created_year >= 2021) %>% 
+# this needs to be redone when we have any bokeh apps tagged
+all_content %>%
+  # by_tag("Bokeh") %>%
+  filter(grepl("bokeh", name), created_year >= 2021) %>%
   rsc_grid()
+
+# cs_demo_content %>% 
+#   by_tag("bokeh") %>% 
+#   rsc_grid()
+# nothing here yet
+
+# all_content %>% 
+#   by_tag("bokeh") %>% 
+#   rsc_grid()
+#nothing
 ```
 
 ## Documents {.tabset .tabset-fade .tabset-pills}
@@ -107,46 +122,70 @@ all_content %>%
 ### R Markdown
 
 ```{r}
-all_content %>% 
-  # ideally by a tag 
-  filter(grepl("rmd", name), !grepl("parameterized", name), created_year >= 2021) %>% 
+# all_content %>% 
+#   # ideally by a tag 
+#   filter(grepl("rmd", name), !grepl("parameterized", name), created_year >= 2021) %>% 
+#   rsc_grid()
+
+cs_demo_content %>%
+  by_tag("r_markdown") %>%
   rsc_grid()
 ```
 
 ### Parameterized Rmd
 
 ```{r}
-all_content %>% 
-  # ideally by a tag 
-  filter(grepl("parameterized", name), created_year >= 2021) %>% 
+# all_content %>% 
+#   # ideally by a tag 
+#   filter(grepl("parameterized", name), created_year >= 2021) %>% 
+#   rsc_grid()
+
+cs_demo_content %>%
+  by_tag("parameterized") %>%
   rsc_grid()
 ```
 
 ### Interactive documents
 
 ```{r}
-all_content %>% 
-  # ideally by a tag but there are probably some other methods to dig up these examples
-  filter((grepl("interactive", name) & grepl("document", name)) | 
-           (grepl("shiny", name) & grepl("document", name)), 
-         created_year >= 2021) %>% 
+# all_content %>% 
+#   # ideally by a tag but there are probably some other methods to dig up these examples
+#   filter((grepl("interactive", name) & grepl("document", name)) | 
+#            (grepl("shiny", name) & grepl("document", name)), 
+#          created_year >= 2021) %>% 
+#   rsc_grid()
+
+cs_demo_content %>%
+  by_tag("interactive_docs") %>%
   rsc_grid()
 ```
 
 ### Quarto
 
 ```{r}
-all_content %>% 
-  filter(grepl("quarto", name), created_year >= 2021) %>% 
-  rsc_grid()
+# all_content %>% 
+#   filter(grepl("quarto", name), created_year >= 2021) %>% 
+#   rsc_grid()
+
+# note needed to use all_content here
+cs_demo_content %>%
+  by_tag("quarto") %>%
+  # rsc_grid()
+  rsc_table()
+#this will display as a table but not a grid
 ```
 
 ### Jupyter Notebook
 
 ```{r}
-all_content %>% 
-  filter(grepl("jupyter", name) & grepl("notebook", name), created_year >= 2021) %>% 
-  # count()
+# all_content %>% 
+#   filter(grepl("jupyter", name) & grepl("notebook", name), created_year >= 2021) %>% 
+#   # count()
+#   rsc_grid()
+
+#note needed to use all_content here
+all_content %>%
+  by_tag("jupyter") %>%
   rsc_grid()
 ```
 
@@ -162,10 +201,40 @@ You're lookin' at it.
 ```
 
 
-## APIs
+## APIs {.tabset .tabset-fade .tabset-pills}
+
+### Plumber
 ```{r}
-all_content %>% 
-  filter(content_category == "api", created_year >= 2021) %>% 
+# all_content %>% 
+#   filter(content_category == "api", created_year >= 2021) %>% 
+#   rsc_grid()
+
+all_content %>%
+  by_tag("plumber") %>%
+  rsc_grid()
+```
+
+### Tableau Extensions
+```{r}
+cs_demo_content %>%
+  by_tag("tableau_extensions") %>%
+  rsc_grid()
+```
+
+
+### Flask
+
+```{r}
+cs_demo_content %>%
+  by_tag("flask") %>%
+  rsc_grid()
+```
+
+### Fast API
+
+```{r}
+cs_demo_content %>%
+  by_tag("fast_api") %>%
   rsc_grid()
 ```
 
@@ -173,7 +242,11 @@ all_content %>%
 
 Python pins now included.
 ```{r}
-all_content %>% 
-  filter(content_category == "pin", created_year >= 2021) %>% 
+# all_content %>% 
+#   filter(content_category == "pin", created_year >= 2021) %>% 
+#   rsc_grid()
+
+cs_demo_content %>%
+  by_tag("pins") %>%
   rsc_grid()
 ```
