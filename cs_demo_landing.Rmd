@@ -129,7 +129,12 @@ all_content %>%
 
 cs_demo_content %>%
   by_tag("r_markdown") %>%
+  # slice(1)
   rsc_grid()
+  
+  # bind_rows(rmd_row, quarto_row)
+  # rmd_row %>% rsc_grid()
+  # quarto_row %>% rsc_grid()
 ```
 
 ### Parameterized Rmd
@@ -168,11 +173,24 @@ cs_demo_content %>%
 #   rsc_grid()
 
 # note needed to use all_content here
-cs_demo_content %>%
-  by_tag("quarto") %>%
-  # rsc_grid()
-  rsc_table()
-#this will display as a table but not a grid
+# cs_demo_content %>%
+#   # filter(content_category == "site") 
+#   by_tag("quarto") %>%
+#   # rsc_grid()
+#   # count()
+#   slice(5) %>%
+#   rsc_grid()
+
+cs_demo_content %>% 
+  by_tag("quarto") %>% 
+  select(-content_category) %>% 
+  rsc_grid()
+#guid == fb6b1150-b7de-465e-b64d-5e2b0a22eb87 = good
+# good
+#guid == bdfe393c-62d2-4e25-aef5-4bec99945bb0	= bad
+# bad %>% select(guid, url, title, app_mode, owner_username, updated_time, updated_year) %>% rsc_grid()
+
+#there is nothing that can explain why one result would render as a grid and another one would not. but removing content_category results in successful rendering. stick to the required columns. lesson learned.
 ```
 
 ### Jupyter Notebook
@@ -191,13 +209,13 @@ all_content %>%
 
 ### connectwidgets
 
-You're lookin' at it.
 
 ```{r echo=FALSE}
-# all_content %>%
-#   filter(grepl("connectwidgets", name), created_year >= 2021) %>%
-#   #no clue why this is working as a table but not as a grid...
-#   rsc_table()
+all_content %>%
+  filter(grepl("connectwidgets", name), created_year >= 2021) %>%
+  #no clue why this is working as a table but not as a grid...
+  select(-content_category) %>% 
+  rsc_grid()
 ```
 
 
